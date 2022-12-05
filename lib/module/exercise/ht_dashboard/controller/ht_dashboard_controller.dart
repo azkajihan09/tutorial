@@ -1,6 +1,5 @@
 import 'package:example/config.dart';
 import 'package:example/core.dart';
-import 'package:example/shared/util/random_image/random_image.dart';
 import 'package:faker_dart/faker_dart.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +19,9 @@ class HtDashboardController extends State<HtDashboardView>
     - Daftar Product
     - Daftar Product Categories
     */
+    await loadProducts();
+    await loadProductCategories();
+    setState(() {});
   }
 
   @override
@@ -87,6 +89,17 @@ class HtDashboardController extends State<HtDashboardView>
   loadProducts() async {
     productList = [];
     setState(() {});
+    var response = await Dio().get(
+      "${AppConfig.baseUrl}/products",
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+        },
+      ),
+    );
+    Map obj = response.data;
+    productList = obj["data"];
+    setState(() {});
     /*
     TODO: --
     1. Buat sebuah get request menggunakan DIO
@@ -105,6 +118,18 @@ class HtDashboardController extends State<HtDashboardView>
 
   loadProductCategories() async {
     productCategoryList = [];
+    setState(() {});
+
+    var response = await Dio().get(
+      "${AppConfig.baseUrl}/product-categories",
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+        },
+      ),
+    );
+    Map obj = response.data;
+    productCategoryList = obj["data"];
     setState(() {});
     /*
     TODO: --
